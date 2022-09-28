@@ -168,19 +168,38 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         .each(checkbox => {
           expect(checkbox[0].checked).to.equal(true)
         })
-      
-      
 
     })
 
     it('seleciona um arquivo da pasta fixtures', function () {
       cy.get('#file-upload')
-      .selectFile(['cypress/fixtures/teste.txt'])
-      .then(input => {
-        console.log(input)
-        expect(input[0].files[0].name).to.equal('teste.txt')
+      .should('not.have.value')
+      .selectFile('cypress/fixtures/teste.txt')
+      .should(function($input) {
+        expect($input[0].files[0].name).to.equal('teste.txt')
       })
 
+    })
+
+    it('seleciona um arquivo simulando um drag-and-drop', function () {
+      cy.get('#file-upload')
+      .should('not.have.value')
+      .selectFile('cypress/fixtures/teste.txt', {action: 'drag-drop'})
+      .then(input => {
+        expect(input[0].files[0].name).to.equal('teste.txt')
+      })
+      
+    })
+
+    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function () {
+      cy.fixture('teste.txt', { encoding: null}).as('testeFile')
+      cy.get('#file-upload')
+      .selectFile('@testeFile')
+      .then(input => {
+        expect(input[0].files[0].name).to.equal('teste.txt')
+      })
+      
     });
+
   })
   
