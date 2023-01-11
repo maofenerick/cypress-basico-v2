@@ -9,8 +9,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
     })
 
-    it('preenche os campos obrigatórios e envia o formulário', function () {
-        const longText = 'Teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste, teste'
+    it.only('preenche os campos obrigatórios e envia o formulário', function () {
+        const longText = Cypress._.repeat('teste, ', 50)
 
         cy.get('#firstName')
           .type('Luis Ricardo', { delay: 0 })
@@ -25,7 +25,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
           .should('have.value','teste@email.com')
 
         cy.get('#open-text-area')
-          .type(longText, { delay: 0 } )
+          .invoke('val', longText)
           .should('have.value', longText)
         
         cy.contains('button', 'Enviar')
